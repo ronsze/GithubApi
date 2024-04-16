@@ -2,18 +2,17 @@ package kr.akaai.homework.feature.follower_list
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import kr.akaai.homework.base.BaseFragment
+import kr.akaai.homework.base.context_view.BaseFragment
 import kr.akaai.homework.databinding.FragmentFollowerListBinding
 import kr.akaai.homework.feature.search_user.SearchUserViewModel
 import kr.akaai.homework.feature.user_detail.UserDetailActivity
-import kr.akaai.homework.github.FollowerInfo
-import kr.akaai.homework.github.UserInfo
+import kr.akaai.homework.model.github.FollowerInfo
+import kr.akaai.homework.model.github.UserInfo
 
 @AndroidEntryPoint
 class FollowerListFragment : BaseFragment<FragmentFollowerListBinding, FollowerListViewModel>() {

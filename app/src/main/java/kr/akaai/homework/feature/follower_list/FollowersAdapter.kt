@@ -10,7 +10,7 @@ import kotlinx.coroutines.*
 import kr.akaai.homework.R
 import kr.akaai.homework.core.util.Functions
 import kr.akaai.homework.databinding.ItemFollowersBinding
-import kr.akaai.homework.github.FollowerInfo
+import kr.akaai.homework.model.github.FollowerInfo
 import java.io.File
 
 class FollowersAdapter(

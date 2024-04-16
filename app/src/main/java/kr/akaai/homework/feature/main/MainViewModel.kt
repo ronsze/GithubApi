@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kr.akaai.homework.R
-import kr.akaai.homework.base.BaseViewModel
-import kr.akaai.homework.base.CommonComponent
+import kr.akaai.homework.base.viewmodel.BaseViewModel
 import kr.akaai.homework.base.SingleLiveEvent
 import javax.inject.Inject
 

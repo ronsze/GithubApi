@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import kr.akaai.homework.R
-import kr.akaai.homework.base.BaseActivity
+import kr.akaai.homework.base.context_view.BaseActivity
 import kr.akaai.homework.databinding.ActivityGithubWebViewBinding
 
 class GithubWebViewActivity : BaseActivity<ActivityGithubWebViewBinding, GithubWebViewViewModel>() {

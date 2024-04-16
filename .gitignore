@@ -13,3 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+/data/src/main/java/kr/akaai/homework/core/Secrets.kt

@@ -11,16 +11,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kr.akaai.homework.base.BaseViewModel
-import kr.akaai.homework.base.CommonComponent
+import kr.akaai.homework.base.viewmodel.BaseViewModel
 import kr.akaai.homework.base.SingleLiveEvent
-import kr.akaai.homework.core.api.github_api.GithubApiRepository
+import kr.akaai.homework.repository.GithubApiRepository
 import kr.akaai.homework.core.util.FavoriteUserModule
-import kr.akaai.homework.core.util.Functions.toArrayList
-import kr.akaai.homework.feature.favorite_user.FavoriteUserViewModel
-import kr.akaai.homework.github.FollowerInfo
-import kr.akaai.homework.github.UserInfo
-import org.json.JSONArray
+import kr.akaai.homework.model.github.FollowerInfo
+import kr.akaai.homework.model.github.UserInfo
 import javax.inject.Inject
 
 @HiltViewModel

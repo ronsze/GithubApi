@@ -5,7 +5,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kr.akaai.homework.R
-import kr.akaai.homework.base.BaseActivity
+import kr.akaai.homework.base.context_view.BaseActivity
 import kr.akaai.homework.databinding.ActivityMainBinding
 import kr.akaai.homework.feature.favorite_user.FavoriteUserFragment
 import kr.akaai.homework.feature.follower_list.FollowerListFragment

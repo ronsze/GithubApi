@@ -6,7 +6,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kr.akaai.homework.R
-import kr.akaai.homework.base.BaseActivity
+import kr.akaai.homework.base.context_view.BaseActivity
 import kr.akaai.homework.databinding.ActivityUserDetailBinding
 import kr.akaai.homework.feature.github_webview.GithubWebViewActivity
 import kr.akaai.homework.feature.main.MainActivity

@@ -16,5 +16,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "HomeWork"
 include ':app'
-include ':core'
-include ':model'
+include ':data'
+include ':domain'

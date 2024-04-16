@@ -2,10 +2,10 @@ package kr.akaai.homework.feature.favorite_user
 
 import androidx.lifecycle.LiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kr.akaai.homework.base.BaseViewModel
-import kr.akaai.homework.base.CommonComponent
+import kr.akaai.homework.base.viewmodel.BaseViewModel
 import kr.akaai.homework.base.SingleLiveEvent
 import kr.akaai.homework.core.util.FavoriteUserModule
+import kr.akaai.homework.model.faivorite.FavoriteUserData
 import javax.inject.Inject
 
 @HiltViewModel

@@ -7,22 +7,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kr.akaai.homework.base.BaseViewModel
-import kr.akaai.homework.base.CommonComponent
+import kr.akaai.homework.base.viewmodel.BaseViewModel
 import kr.akaai.homework.base.SingleLiveEvent
-import kr.akaai.homework.core.api.github_api.GithubApiRepository
+import kr.akaai.homework.repository.GithubApiRepository
 import kr.akaai.homework.core.util.FavoriteUserModule
 import kr.akaai.homework.core.util.Functions
-import kr.akaai.homework.core.util.Functions.toArrayList
-import kr.akaai.homework.github.FollowerInfo
-import kr.akaai.homework.github.UserInfo
-import org.json.JSONArray
+import kr.akaai.homework.model.github.FollowerInfo
+import kr.akaai.homework.model.github.UserInfo
 import java.io.File
 import javax.inject.Inject
 

@@ -6,33 +6,21 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kr.akaai.homework.R
-import kr.akaai.homework.base.BaseActivity
+import kr.akaai.homework.base.context_view.BaseActivity
 import kr.akaai.homework.databinding.ActivitySearchUserBinding
-import kr.akaai.homework.feature.follower_list.FollowerListFragment
 import kr.akaai.homework.feature.main.MainActivity
 
 @AndroidEntryPoint
 class SearchUserActivity : BaseActivity<ActivitySearchUserBinding, SearchUserViewModel>() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_search_user)
-        super.onCreate(savedInstanceState)
-    }
-
     override val viewModel: SearchUserViewModel by viewModels()
 
-    override fun initDataBinding() {
+    override fun afterBinding() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
     }
 
     override fun observeViewModel() {
-        viewModel.searchFollowerFailEvent.observe(this) {
-            showToast(it)
-        }
-
-        viewModel.goToMainEvent.observe(this) {
-            goToMain()
-        }
+        viewModel.event
     }
 
     private fun goToMain() {

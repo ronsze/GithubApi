@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import kr.akaai.homework.base.BaseFragment
+import kr.akaai.homework.base.context_view.BaseFragment
 import kr.akaai.homework.databinding.FragmentFavoriteUserBinding
+import kr.akaai.homework.feature.favorite_user.adapter.FavoriteUserAdapter
 
 @AndroidEntryPoint
 class FavoriteUserFragment : BaseFragment<FragmentFavoriteUserBinding, FavoriteUserViewModel>() {
