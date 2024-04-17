@@ -1,30 +1,22 @@
 package kr.akaai.homework.feature.github_webview
 
-import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
-import kr.akaai.homework.R
-import kr.akaai.homework.base.BaseActivity
+import kr.akaai.homework.Constants
+import kr.akaai.homework.Constants.GITHUB_URL
+import kr.akaai.homework.base.context_view.BaseActivity
 import kr.akaai.homework.databinding.ActivityGithubWebViewBinding
 
-class GithubWebViewActivity : BaseActivity<ActivityGithubWebViewBinding, GithubWebViewViewModel>() {
-    companion object {
-        const val GITHUB_URL = "github_url"
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_github_web_view)
-        super.onCreate(savedInstanceState)
-    }
-
+class GithubWebViewActivity : BaseActivity<ActivityGithubWebViewBinding, GithubWebViewViewModel>(ActivityGithubWebViewBinding::inflate) {
     override val viewModel: GithubWebViewViewModel by viewModels()
 
-    override fun initDataBinding() {
+    override fun afterBinding() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
         loadWebView(intent.getStringExtra(GITHUB_URL) ?: "")
     }
+
+    override fun observeViewModel() {}
 
     private fun loadWebView(url: String) {
         binding.webView.apply {
@@ -37,7 +29,5 @@ class GithubWebViewActivity : BaseActivity<ActivityGithubWebViewBinding, GithubW
         backSlideFinish()
     }
 
-    override fun observeViewModel() {
 
-    }
 }

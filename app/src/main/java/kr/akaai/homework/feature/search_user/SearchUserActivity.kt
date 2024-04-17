@@ -1,44 +1,39 @@
 package kr.akaai.homework.feature.search_user
 
 import android.content.Intent
-import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kr.akaai.homework.R
-import kr.akaai.homework.base.BaseActivity
+import kr.akaai.homework.Constants.USER_INFO
+import kr.akaai.homework.base.context_view.BaseActivity
 import kr.akaai.homework.databinding.ActivitySearchUserBinding
-import kr.akaai.homework.feature.follower_list.FollowerListFragment
 import kr.akaai.homework.feature.main.MainActivity
+import kr.akaai.homework.model.github.UserInfo
 
 @AndroidEntryPoint
-class SearchUserActivity : BaseActivity<ActivitySearchUserBinding, SearchUserViewModel>() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_search_user)
-        super.onCreate(savedInstanceState)
-    }
-
+class SearchUserActivity : BaseActivity<ActivitySearchUserBinding, SearchUserViewModel>(ActivitySearchUserBinding::inflate) {
     override val viewModel: SearchUserViewModel by viewModels()
 
-    override fun initDataBinding() {
+    override fun afterBinding() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
     }
 
     override fun observeViewModel() {
-        viewModel.searchFollowerFailEvent.observe(this) {
-            showToast(it)
-        }
-
-        viewModel.goToMainEvent.observe(this) {
-            goToMain()
+        viewModel.event.observe(this) {
+            handleEvent(it)
         }
     }
 
-    private fun goToMain() {
+    private fun handleEvent(event: SearchUserViewModel.SearchUserEvent) {
+        when (event) {
+            SearchUserViewModel.SearchUserEvent.OnClickSearch -> viewModel.searchUser(binding.userIdField.text.toString())
+            is SearchUserViewModel.SearchUserEvent.NavToMain -> navToMain(event.userInfo)
+        }
+    }
+
+    private fun navToMain(userInfo: UserInfo) {
         val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra(SearchUserViewModel.FOLLOWER_LIST, viewModel.followerList)
-        intent.putExtra(SearchUserViewModel.CURRENT_USER_INFO, viewModel.userInfo)
+        intent.putExtra(USER_INFO, userInfo)
         startActivitySlide(intent)
     }
 }

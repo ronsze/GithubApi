@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.7">
-      <module name="HomeWork.app" target="11" />
-      <module name="HomeWork.core" target="11" />
+      <module name="HomeWork.app" target="17" />
+      <module name="HomeWork.data" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
