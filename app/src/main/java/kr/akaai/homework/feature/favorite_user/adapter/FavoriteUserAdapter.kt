@@ -2,33 +2,31 @@ package kr.akaai.homework.feature.favorite_user.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kr.akaai.homework.databinding.ItemFavoriteUserBinding
-import kr.akaai.homework.model.faivorite.FavoriteUserData
-import java.io.File
+import kr.akaai.homework.model.favorite.FavoriteUserData
 
-class FavoriteUserAdapter: RecyclerView.Adapter<FavoriteUserAdapter.FavoriteUserViewHolder>() {
+class FavoriteUserAdapter: ListAdapter<FavoriteUserData, FavoriteUserAdapter.FavoriteUserViewHolder>(
+    object : DiffUtil.ItemCallback<FavoriteUserData>() {
+        override fun areItemsTheSame(oldItem: FavoriteUserData, newItem: FavoriteUserData): Boolean = oldItem.userId == newItem.userId
+        override fun areContentsTheSame(oldItem: FavoriteUserData, newItem: FavoriteUserData): Boolean = oldItem == newItem
+    }
+) {
     inner class FavoriteUserViewHolder(val binding: ItemFavoriteUserBinding) : RecyclerView.ViewHolder(binding.root)
-
-    private val favoriteUserList: ArrayList<FavoriteUserData> = ArrayList()
-    private lateinit var imageDir: File
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteUserViewHolder {
         val binding = ItemFavoriteUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        imageDir = parent.context.filesDir
         return FavoriteUserViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: FavoriteUserViewHolder, position: Int) {
-        val item = favoriteUserList[position]
-        holder.binding.name.text = item.userId
-        holder.binding.image.setImageBitmap(item.image)
+        val item = currentList[position]
+        holder.binding.run {
+            this.item = item
+        }
     }
 
-    override fun getItemCount(): Int = favoriteUserList.count()
-
-    fun setFavoriteUserList(list: ArrayList<FavoriteUserData>) {
-        favoriteUserList.clear()
-        favoriteUserList.addAll(list)
-    }
+    override fun getItemCount(): Int = currentList.count()
 }

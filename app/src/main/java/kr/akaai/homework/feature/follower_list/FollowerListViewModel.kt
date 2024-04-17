@@ -2,124 +2,76 @@ package kr.akaai.homework.feature.follower_list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kr.akaai.homework.base.mvvm.EventLiveData
 import kr.akaai.homework.base.viewmodel.BaseViewModel
-import kr.akaai.homework.base.SingleLiveEvent
-import kr.akaai.homework.repository.GithubApiRepository
-import kr.akaai.homework.core.util.FavoriteUserModule
+import kr.akaai.homework.core.provider.IODispatcher
+import kr.akaai.homework.model.favorite.FavoriteUserData
 import kr.akaai.homework.model.github.FollowerInfo
 import kr.akaai.homework.model.github.UserInfo
+import kr.akaai.homework.usecase.favorite_user.InsertFavoriteUserUseCase
+import kr.akaai.homework.usecase.github_api.GetFollowerListUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class FollowerListViewModel @Inject constructor(
-    commonComponent: CommonComponent,
-    private val githubApiRepository: GithubApiRepository,
-    private val favoriteUserModule: FavoriteUserModule
-) : BaseViewModel(commonComponent) {
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val getFollowerListUseCase: GetFollowerListUseCase,
+    private val insertFavoriteUserUseCase: InsertFavoriteUserUseCase
+) : BaseViewModel() {
+    private val _event: EventLiveData<FollowerListEvent> = EventLiveData()
+    val event: LiveData<FollowerListEvent> get() = _event
 
-    private val _fetchFollowerListEvent: SingleLiveEvent<Void> = SingleLiveEvent()
-    val fetchFollowerListEvent: LiveData<Void>
-        get() = _fetchFollowerListEvent
-
-    private val _currentUserIdLiveData: MutableLiveData<String> = MutableLiveData("")
-    val currentUserIdLiveData: LiveData<String>
-        get() = _currentUserIdLiveData
-
-    private val _goToUserDetailEvent: SingleLiveEvent<String> = SingleLiveEvent()
-    val goToUserDetailEvent: LiveData<String>
-        get() = _goToUserDetailEvent
-
-    private val _searchFollowerFailEvent: MutableLiveData<Throwable> = MutableLiveData()
-    val searchFollowerFailEvent: LiveData<Throwable>
-        get() = _searchFollowerFailEvent
-
-    private val _showToastEvent: SingleLiveEvent<String> = SingleLiveEvent()
-    val showToastEvent: LiveData<String>
-        get() = _showToastEvent
-
-    private val _finishEvent: SingleLiveEvent<Void> = SingleLiveEvent()
-    val finishEvent: LiveData<Void>
-        get() = _finishEvent
+    private val _userInfo: MutableLiveData<UserInfo> = MutableLiveData()
+    val userInfo: LiveData<UserInfo> get() = _userInfo
 
     private val _followerList = ArrayList<FollowerInfo>()
     val followerList: ArrayList<FollowerInfo>
         get() = _followerList
 
-    private var currentPage: Int = 1
-    private var isLastPage: Boolean = false
-    var currentUserInfo: UserInfo? = null
-        set(value) {
-            _currentUserIdLiveData.postValue(value?.login.toString())
-            field = value
-        }
+    fun setCurrentUser(userInfo: UserInfo) = _userInfo.postValue(userInfo)
 
-    fun setFollowerList(list: ArrayList<FollowerInfo>) {
-        _followerList.addAll(list)
-        _fetchFollowerListEvent.call()
+    fun loadData() {
+        loadFollowerList()
     }
 
-    val onScrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-            super.onScrollStateChanged(recyclerView, newState)
-            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                val layoutManager = recyclerView.layoutManager as GridLayoutManager
-                val visibleItemCount = layoutManager.findLastCompletelyVisibleItemPosition() + 1
-                if (visibleItemCount == layoutManager.itemCount) {
-                    if (!isLastPage) {
-                        currentPage++
-                        fetchFollowerList()
+    private fun loadFollowerList() {
+        userInfo.value?.run {
+            viewModelScope.launch(ioDispatcher) {
+                getFollowerListUseCase(login)
+                    .onSuccess {
+
                     }
-                }
+                    .onFailure {
+                        showToast(it.message.toString())
+                    }
             }
         }
-    }
-
-    private fun fetchFollowerList() {
-        compositeDisposable.add(
-            githubApiRepository.getFollowerList(
-                _currentUserIdLiveData.value.toString(), currentPage
-            )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ res ->
-                    if (res.isEmpty()) isLastPage = true
-                    else setFollowerList(res)
-                }, { err ->
-                    _searchFollowerFailEvent.postValue(err)
-                })
-        )
     }
 
     private fun addFavoriteUser() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val task = withContext(Dispatchers.Default) { favoriteUserModule.addUser(
-                currentUserInfo?.login.toString(),
-                currentUserInfo?.avatar_url.toString())
+        userInfo.value?.run {
+            viewModelScope.launch(ioDispatcher) {
+                insertFavoriteUserUseCase(FavoriteUserData(login, avatarUrl))
+                    .onSuccess {
+                        showToast("Success")
+                    }
+                    .onFailure {
+                        showToast(it.message.toString())
+                    }
             }
-
-            if (task == null) _showToastEvent.postValue("Success")
-            else _showToastEvent.postValue(task.message)
         }
     }
 
-    fun onClickFollowerItem(userId: String) {
-        _goToUserDetailEvent.postValue(userId)
-    }
+    fun onClickFollowerItem(userId: String) = _event.postValue(FollowerListEvent.NavToUserDetail(userId))
+    fun onClickAddFavorite() = addFavoriteUser()
+    fun onClickFinish() = _event.postValue(FollowerListEvent.Finish)
 
-    fun onClickAddFavorite() {
-        addFavoriteUser()
-    }
-
-    fun onClickFinish() {
-        _finishEvent.call()
+    sealed class FollowerListEvent {
+        data class NavToUserDetail(val userId: String): FollowerListEvent()
+        data object Finish: FollowerListEvent()
     }
 }

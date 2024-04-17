@@ -1,4 +1,4 @@
-package kr.akaai.homework.usecase
+package kr.akaai.homework.usecase.github_api
 
 import kr.akaai.homework.model.github.UserInfo
 

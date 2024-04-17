@@ -9,9 +9,9 @@ class GithubApiDataSource @Inject constructor(
 ) : GithubApiRepository {
     private val githubApiService = retrofit.create(GithubApiService::class.java)
 
-    override fun getFollowerList(userId: String, page: Int) =
+    override suspend fun getFollowerList(userId: String, page: Int) =
         githubApiService.getFollowerList(userId, page = page)
 
-    override fun getUserInfo(userId: String) =
+    override suspend fun getUserInfo(userId: String) =
         githubApiService.getUserInfo(userId)
 }

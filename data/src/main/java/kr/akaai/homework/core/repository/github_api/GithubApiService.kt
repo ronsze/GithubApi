@@ -8,14 +8,14 @@ import retrofit2.http.Query
 
 interface GithubApiService {
     @GET("users/{userId}/followers")
-    fun getFollowerList(
+    suspend fun getFollowerList(
         @Path ("userId") userId: String,
         @Query("per_page") perPage: Int = 15,
         @Query("page") page: Int
     ): ArrayList<FollowerInfo>
 
     @GET("users/{userId}")
-    fun getUserInfo(
+    suspend fun getUserInfo(
         @Path ("userId") userId: String
     ): UserInfo
 }

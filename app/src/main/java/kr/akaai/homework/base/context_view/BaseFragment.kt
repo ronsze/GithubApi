@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import kr.akaai.homework.R
 import kr.akaai.homework.base.viewmodel.BaseViewModel
 
-abstract class BaseFragment<B: ViewDataBinding, V: BaseViewModel>(
+abstract class BaseFragment<out B: ViewDataBinding, out V: BaseViewModel>(
     private val inflate: (LayoutInflater, ViewGroup?, Boolean) -> B
 ): Fragment() {
     private var _binding: B? = null

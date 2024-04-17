@@ -1,4 +1,4 @@
-package kr.akaai.homework.feature.follower_list
+package kr.akaai.homework.feature.follower_list.adapter
 
 import android.content.Context
 import android.graphics.Rect
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class FollowerListDecoration(
-    private val context: Context?
+    private val context: Context
 ): RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
@@ -24,25 +24,19 @@ class FollowerListDecoration(
         val position = parent.getChildAdapterPosition(view)
 
         when (position) {
-            0, 1, 2 -> outRect.top = dpToPx(10)
+            0, 1, 2 -> outRect.top = dpToPx(10f)
         }
-        outRect.bottom = dpToPx(10)
+        outRect.bottom = dpToPx(10f)
         if(spanIndex == 0) {
             // left item
-            outRect.left = dpToPx(10)
-            outRect.right = dpToPx(5)
+            outRect.left = dpToPx(10f)
+            outRect.right = dpToPx(5f)
         } else if(spanIndex == 1) {
             //  right item
-            outRect.left = dpToPx(5)
-            outRect.right = dpToPx(10)
+            outRect.left = dpToPx(5f)
+            outRect.right = dpToPx(10f)
         }
     }
 
-    private fun dpToPx(dp: Int): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp.toFloat(),
-            context?.resources?.displayMetrics
-        ).toInt()
-    }
+    private fun dpToPx(dp: Float): Int = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
 }

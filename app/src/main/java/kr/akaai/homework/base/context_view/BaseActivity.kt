@@ -9,7 +9,7 @@ import androidx.databinding.ViewDataBinding
 import kr.akaai.homework.R
 import kr.akaai.homework.base.viewmodel.BaseViewModel
 
-abstract class BaseActivity<B: ViewDataBinding, V: BaseViewModel>(
+abstract class BaseActivity<out B: ViewDataBinding, out V: BaseViewModel>(
     private val inflate: (LayoutInflater) -> B
 ): AppCompatActivity() {
     private var _binding: B? = null
@@ -25,14 +25,20 @@ abstract class BaseActivity<B: ViewDataBinding, V: BaseViewModel>(
 
         afterBinding()
         observeViewModel()
+        viewModel.baseEvent.observe(this) {
+            handleBaseEvent(it)
+        }
     }
 
     abstract fun afterBinding()
     abstract fun observeViewModel()
-
-    protected fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun handleBaseEvent(event: BaseViewModel.BaseEvent) {
+        when (event) {
+            is BaseViewModel.BaseEvent.ShowToast -> showToast(event.msg)
+        }
     }
+
+    protected fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 
     protected fun startActivitySlide(intent: Intent) {
         startActivity(intent)
