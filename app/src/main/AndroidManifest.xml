@@ -12,16 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         <activity
-            android:name=".feature.github_webview.GithubWebViewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".feature.user_detail.UserDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".feature.main.MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".feature.search_user.SearchUserActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

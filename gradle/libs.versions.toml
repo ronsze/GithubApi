@@ -1,9 +1,10 @@
 [versions]
-kotlin = "1.9.0"
-gradle-plugin = "8.3.0-alpha14"
+kotlin = "1.9.24"
+gradle-plugin = "8.3.2"
 hilt = "2.50"
 retrofit = "2.9.0"
-glide = "4.16.0"
+navigation = "2.7.7"
+lifecycle = "2.8.3"
 room = "2.6.1"
 
 
@@ -35,11 +36,22 @@ okhttp-interceptor = { group = "com.squareup.okhttp3", name = "logging-intercept
 mockk = { group = "io.mockk", name = "mockk", version = "1.12.1" }
 androidx-testing = { group = "androidx.arch.core", name = "core-testing", version = "2.2.0" }
 
-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
-glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+glide-compose = { group = "com.github.bumptech.glide", name = "compose", version = "1.0.0-beta01" }
 
 room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+# compose
+compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2024.06.00" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-constraint = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.0.1" }
+lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
+compose-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version = "1.6.8" }
+compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+hilt-navigation-compoose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0" }
 
 [plugins]
 application = { id = "com.android.application", version.ref = "gradle-plugin" }
@@ -51,3 +63,4 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 [bundles]
 retrofit = ["retrofit", "retrofit-rxjava2Adapter", "gsonConverter"]
 okhttp = ["okhttp", "okhttp-interceptor"]
+compose = ["compose-material3", "compose-ui", "compose-preview", "compose-ui-tooling", "compose-constraint", "lifecycle-compose", "compose-livedata", "compose-navigation", "hilt-navigation-compoose"]

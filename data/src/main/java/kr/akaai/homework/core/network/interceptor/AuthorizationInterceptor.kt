@@ -1,6 +1,6 @@
 package kr.akaai.homework.core.network.interceptor
 
-import kr.akaai.homework.core.Secrets
+
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -10,7 +10,6 @@ class AuthorizationInterceptor: Interceptor {
         return try {
             chain.proceed(
                 request.newBuilder()
-                    .addHeader(AUTH_HEADER, Secrets.AUTH_TOKEN)
                     .build()
             )
         } catch (e: Exception) {

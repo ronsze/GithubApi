@@ -35,7 +35,10 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     namespace 'kr.akaai.homework'
 }
@@ -65,10 +68,13 @@ dependencies {
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
 
-    implementation(libs.glide)
-    annotationProcessor(libs.glide.compiler)
-
     implementation(libs.room)
     annotationProcessor(libs.room.compiler)
     kapt(libs.room.compiler)
+
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose)
+    implementation(libs.glide.compose)
+
+    implementation(libs.gsonConverter)
 }

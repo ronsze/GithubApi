@@ -3,13 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="item"
-            type="kr.akaai.homework.model.github.FollowerInfo" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/parent_layout"
         android:layout_width="match_parent"
@@ -22,14 +15,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:url="@{item.avatarUrl}" />
+ />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@{item.login}"
             android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="@id/image"
             app:layout_constraintStart_toStartOf="@id/image"

@@ -12,7 +12,7 @@ interface GithubApiService {
         @Path ("userId") userId: String,
         @Query("per_page") perPage: Int = 15,
         @Query("page") page: Int
-    ): ArrayList<FollowerInfo>
+    ): List<FollowerInfo>
 
     @GET("users/{userId}")
     suspend fun getUserInfo(

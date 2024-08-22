@@ -3,13 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="item"
-            type="kr.akaai.homework.model.favorite.FavoriteUserData" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/parent_layout"
         android:layout_width="match_parent"
@@ -23,7 +16,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:url="@{item.profileImageUrl}" />
+      />
 
         <TextView
             android:id="@+id/name"
@@ -31,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:gravity="center"
-            android:text="@{item.userId}"
+
             android:textColor="@color/black"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"

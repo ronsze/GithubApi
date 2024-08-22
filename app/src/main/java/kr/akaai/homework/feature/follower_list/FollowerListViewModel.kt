@@ -1,13 +1,13 @@
 package kr.akaai.homework.feature.follower_list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kr.akaai.homework.base.mvvm.EventLiveData
-import kr.akaai.homework.base.viewmodel.BaseViewModel
+import kr.akaai.homework.base.BaseViewModel
 import kr.akaai.homework.core.provider.IODispatcher
 import kr.akaai.homework.model.favorite.FavoriteUserData
 import kr.akaai.homework.model.github.FollowerInfo
@@ -22,56 +22,49 @@ class FollowerListViewModel @Inject constructor(
     private val getFollowerListUseCase: GetFollowerListUseCase,
     private val insertFavoriteUserUseCase: InsertFavoriteUserUseCase
 ) : BaseViewModel() {
-    private val _event: EventLiveData<FollowerListEvent> = EventLiveData()
-    val event: LiveData<FollowerListEvent> get() = _event
+    private val _uiState: MutableStateFlow<FollowerListUiState> = MutableStateFlow(FollowerListUiState.Loading)
+    val uiState get() = _uiState.asStateFlow()
 
-    private val _userInfo: MutableLiveData<UserInfo> = MutableLiveData()
-    val userInfo: LiveData<UserInfo> get() = _userInfo
+    private val _followerList: SnapshotStateList<FollowerInfo> = SnapshotStateList()
+    val followerList get() = _followerList
 
-    private val _followerList = ArrayList<FollowerInfo>()
-    val followerList: ArrayList<FollowerInfo>
-        get() = _followerList
+    private var currentPage = 0
 
-    fun setCurrentUser(userInfo: UserInfo) = _userInfo.postValue(userInfo)
-
-    fun loadData() {
-        loadFollowerList()
+    fun loadData(login: String) {
+        _followerList.clear()
+        loadFollowerList(login)
     }
 
-    private fun loadFollowerList() {
-        userInfo.value?.run {
-            viewModelScope.launch(ioDispatcher) {
-                getFollowerListUseCase(login)
-                    .onSuccess {
-
-                    }
-                    .onFailure {
-                        showToast(it.message.toString())
-                    }
-            }
+    fun loadFollowerList(login: String) {
+        viewModelScope.launch(ioDispatcher) {
+            getFollowerListUseCase(login, currentPage)
+                .onSuccess {
+                    _followerList.addAll(it)
+                    currentPage++
+                    if (uiState.value == FollowerListUiState.Loading) _uiState.set(FollowerListUiState.View)
+                }
+                .onFailure {
+                }
         }
     }
 
-    private fun addFavoriteUser() {
-        userInfo.value?.run {
-            viewModelScope.launch(ioDispatcher) {
-                insertFavoriteUserUseCase(FavoriteUserData(login, avatarUrl))
-                    .onSuccess {
-                        showToast("Success")
-                    }
-                    .onFailure {
-                        showToast(it.message.toString())
-                    }
-            }
+    fun addFavoriteUser(userInfo: UserInfo) {
+        showLoading()
+        viewModelScope.launch(ioDispatcher) {
+            insertFavoriteUserUseCase(FavoriteUserData(userInfo.login, userInfo.avatarUrl))
+                .onSuccess {
+                    dismissLoading()
+                    showPopupMessage("Success")
+                }
+                .onFailure {
+                    dismissLoading()
+                    showPopupMessage(getErrorMessage(it))
+                }
         }
     }
 
-    fun onClickFollowerItem(userId: String) = _event.postValue(FollowerListEvent.NavToUserDetail(userId))
-    fun onClickAddFavorite() = addFavoriteUser()
-    fun onClickFinish() = _event.postValue(FollowerListEvent.Finish)
-
-    sealed class FollowerListEvent {
-        data class NavToUserDetail(val userId: String): FollowerListEvent()
-        data object Finish: FollowerListEvent()
+    sealed interface FollowerListUiState {
+        data object Loading: FollowerListUiState
+        data object View: FollowerListUiState
     }
 }
